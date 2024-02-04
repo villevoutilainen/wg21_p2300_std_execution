@@ -50,9 +50,9 @@ namespace exec {
         STDEXEC_ATTRIBUTE((no_unique_address)) _Fun __fun_;
         STDEXEC_ATTRIBUTE((no_unique_address)) _State __state_{};
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          __self.__state_.emplace(__conv{[&]() noexcept {
-            return ((_Fun&&) __self.__fun_)(__self.__ctx_);
+        void start() noexcept {
+          __state_.emplace(__conv{[&]() noexcept {
+            return ((_Fun&&) __fun_)(__ctx_);
           }});
         }
       };

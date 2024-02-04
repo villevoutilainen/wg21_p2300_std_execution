@@ -675,8 +675,8 @@ namespace {
 
       R recv_;
 
-      friend void tag_invoke(ex::start_t, operation& self) noexcept {
-        ex::set_value((R&&) self.recv_);
+      void start() noexcept {
+        ex::set_value((R&&) recv_);
       }
     };
 

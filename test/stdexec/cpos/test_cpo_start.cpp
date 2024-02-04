@@ -25,16 +25,16 @@ namespace {
   struct my_oper : immovable {
     bool started_{false};
 
-    friend void tag_invoke(ex::start_t, my_oper& self) noexcept {
-      self.started_ = true;
+    void start() noexcept {
+      started_ = true;
     }
   };
 
   struct op_value /*: immovable*/ { // Intentionally movable!
     bool* started_;
 
-    friend void tag_invoke(ex::start_t, op_value self) noexcept {
-      *self.started_ = true;
+    void start() noexcept {
+      *started_ = true;
     }
   };
 
@@ -44,8 +44,8 @@ namespace {
   struct op_rvalref : immovable {
     bool* started_;
 
-    friend void tag_invoke(ex::start_t, op_rvalref&& self) noexcept {
-      *self.started_ = true;
+    void start() noexcept {
+      *started_ = true;
     }
   };
   STDEXEC_PRAGMA_POP()
@@ -53,16 +53,16 @@ namespace {
   struct op_ref : immovable {
     bool* started_;
 
-    friend void tag_invoke(ex::start_t, op_ref& self) noexcept {
-      *self.started_ = true;
+    void start() noexcept {
+      *started_ = true;
     }
   };
 
   struct op_cref : immovable {
     bool* started_;
 
-    friend void tag_invoke(ex::start_t, const op_cref& self) noexcept {
-      *self.started_ = true;
+    void start() const noexcept {
+      *started_ = true;
     }
   };
 

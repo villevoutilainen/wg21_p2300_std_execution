@@ -49,11 +49,11 @@ namespace {
       Receiver rcvr_;
       int counter_;
 
-      friend void tag_invoke(start_t, operation &self) noexcept {
-        if (self.counter_ == 0) {
-          set_value((Receiver &&) self.rcvr_, true);
+      void start() noexcept {
+        if (counter_ == 0) {
+          set_value((Receiver &&) rcvr_, true);
         } else {
-          set_value((Receiver &&) self.rcvr_, false);
+          set_value((Receiver &&) rcvr_, false);
         }
       }
     };

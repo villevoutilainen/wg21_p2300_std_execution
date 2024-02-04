@@ -56,7 +56,7 @@ namespace exec {
         : __max_recursion_depth_(__max_recursion_depth) {
       }
 
-     private:
+    private:
       struct __operation_base {
         using __execute_fn = void(__operation_base*) noexcept;
         using is_operation_state = void;
@@ -70,19 +70,19 @@ namespace exec {
           __execute_(this);
         }
 
-        friend void tag_invoke(start_t, __operation_base& __self) noexcept {
+        void start() noexcept {
           auto* __current_state = __trampoline_state<__operation_base>::__current_;
           if (__current_state == nullptr) {
             __trampoline_state<__operation_base> __state;
-            __self.__execute();
+            __execute();
             __state.__drain();
-          } else if (__current_state->__recursion_depth_ < __self.__max_recursion_depth_) {
+          } else if (__current_state->__recursion_depth_ < __max_recursion_depth_) {
             ++__current_state->__recursion_depth_;
-            __self.__execute();
+            __execute();
           } else {
             // Exceeded recursion limit.
-            __self.__next_ = std::exchange(
-              __current_state->__head_, static_cast<__operation_base*>(&__self));
+            __next_ = std::exchange(
+              __current_state->__head_, static_cast<__operation_base*>(this));
           }
         }
 

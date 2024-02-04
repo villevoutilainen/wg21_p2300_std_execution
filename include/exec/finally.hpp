@@ -211,13 +211,12 @@ namespace exec {
 
       std::variant<__initial_op_t, __final_op_t> __op_;
 
-      template <std::same_as<__t> _Self>
-      friend void tag_invoke(start_t, _Self& __self) noexcept {
-        STDEXEC_ASSERT(__self.__op_.index() == 0);
-        start(std::get_if<0>(&__self.__op_)->__initial_operation_);
+     public:
+      void start() noexcept {
+        STDEXEC_ASSERT(__op_.index() == 0);
+        std::get_if<0>(&__op_)->__initial_operation_.start();
       }
 
-     public:
       using __id = __operation_state;
 
       template <class... _Args>
@@ -230,7 +229,7 @@ namespace exec {
         __final_op_t& __final_op = __op_.template emplace<1>(__conv{[&] {
           return stdexec::connect((_FinalSender&&) __final, __final_receiver_t{this});
         }});
-        start(__final_op);
+        __final_op.start();
       }
 
       __t(_InitialSender&& __initial, _FinalSender&& __final, _Receiver __receiver)

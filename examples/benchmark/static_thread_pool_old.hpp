@@ -403,6 +403,9 @@ namespace exec_old {
   class static_thread_pool::operation : task_base {
   public:
     using is_operation_state = void;
+    void start()noexcept {
+      enqueue_(this);
+    }
   private:
     using Receiver = stdexec::__t<ReceiverId>;
     friend static_thread_pool::scheduler::sender;
@@ -430,9 +433,6 @@ namespace exec_old {
       pool_.enqueue(op);
     }
 
-    friend void tag_invoke(stdexec::start_t, operation& op) noexcept {
-      op.enqueue_(&op);
-    }
   };
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -677,8 +677,8 @@ namespace exec_old {
 
     inner_op_state inner_op_;
 
-    friend void tag_invoke(stdexec::start_t, bulk_op_state& op) noexcept {
-      stdexec::start(op.inner_op_);
+    void start() noexcept {
+      stdexec::start(inner_op_);
     }
 
     bulk_op_state(

@@ -132,8 +132,8 @@ namespace exec {
           , __op_{stdexec::connect(static_cast<_Sender&&>(__sndr), __item_receiver_t{this})} {
         }
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          stdexec::start(__self.__op_);
+        void start() noexcept {
+          stdexec::start(__op_);
         }
       };
     };
@@ -244,8 +244,8 @@ namespace exec {
           , __op_{exec::subscribe(static_cast<_Sender&&>(__sndr), __receiver_t{this})} {
         }
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          stdexec::start(__self.__op_);
+        void start() noexcept {
+          stdexec::start(__op_);
         }
       };
     };

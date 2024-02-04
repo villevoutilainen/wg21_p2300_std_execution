@@ -529,7 +529,7 @@ namespace stdexec {
           //static_assert(receiver_of<_Receiver, _Sigs>);
           if constexpr (!same_as<_Operation, __debug_operation>) {
             auto __op = connect((_Sender&&) __sndr, _Receiver{});
-            start(__op);
+            __op.start();
           }
         }
       }
@@ -1168,12 +1168,11 @@ namespace stdexec {
   namespace __start {
     struct start_t {
       template <class _Op>
-        requires tag_invocable<start_t, _Op&>
+        requires requires (_Op& __op) { __op.start(); }
       STDEXEC_ATTRIBUTE((always_inline)) //
         void
         operator()(_Op& __op) const noexcept {
-        static_assert(nothrow_tag_invocable<start_t, _Op&>);
-        (void) tag_invoke(start_t{}, __op);
+        (void) __op.start();
       }
     };
   }
@@ -1189,7 +1188,7 @@ namespace stdexec {
     std::is_object_v<_Op> && //
     requires(_Op& __op) {    //
     typename _Op::is_operation_state;
-      start(__op);
+      __op.start();
     };
 
 #if !STDEXEC_STD_NO_COROUTINES_
@@ -1242,8 +1241,8 @@ namespace stdexec {
         }
       }
 
-      friend void tag_invoke(start_t, __operation_base& __self) noexcept {
-        __self.__coro_.resume();
+      void start() noexcept {
+        __coro_.resume();
       }
     };
 
@@ -3881,8 +3880,8 @@ namespace stdexec {
           , __rcvr_{(_Receiver&&) __rcvr} {
         }
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          __self.__start_();
+        void start() noexcept {
+          __start_();
         }
 
         void __start_() noexcept;

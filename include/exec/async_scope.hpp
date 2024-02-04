@@ -67,9 +67,14 @@ namespace exec {
           , __op_(stdexec::connect((_Constrained&&) __sndr, (_Receiver&&) __rcvr)) {
         }
 
+        void start() noexcept {
+          return __start_();
+        }
+
+
        private:
         static void __notify_waiter(__task* __self) noexcept {
-          start(static_cast<__t*>(__self)->__op_);
+          static_cast<__t*>(__self)->__op_.start();
         }
 
         void __start_() noexcept {
@@ -81,11 +86,7 @@ namespace exec {
             return;
           }
           __guard.unlock();
-          start(this->__op_);
-        }
-
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          return __self.__start_();
+          this->__op_.start();;
         }
 
         STDEXEC_IMMOVABLE_NO_UNIQUE_ADDRESS connect_result_t<_Constrained, _Receiver> __op_;
@@ -199,6 +200,9 @@ namespace exec {
           : __nest_op_base<_ReceiverId>{{}, __scope, (_Rcvr&&) __rcvr}
           , __op_(stdexec::connect((_Sender&&) __c, __nest_rcvr_t{this})) {
         }
+        void start() noexcept {
+          return __start_();
+        }
        private:
         void __start_() noexcept {
           STDEXEC_ASSERT(this->__scope_);
@@ -206,12 +210,9 @@ namespace exec {
           auto& __active = this->__scope_->__active_;
           ++__active;
           __guard.unlock();
-          start(__op_);
+          __op_.start();
         }
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          return __self.__start_();
-        }
       };
     };
 
@@ -296,10 +297,6 @@ namespace exec {
         using __forward_consumer =
           typename stop_token_of_t<env_of_t<_Receiver>>::template callback_type<__forward_stopped>;
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          __self.__start_();
-        }
-
         void __complete_() noexcept {
           try {
             auto __state = std::move(__state_);
@@ -360,6 +357,10 @@ namespace exec {
        public:
         using __id = __future_op;
         using is_operation_state = void;
+
+        void start()noexcept {
+          __start_();
+        }
 
         ~__t() noexcept {
           if (__state_ != nullptr) {
@@ -691,11 +692,11 @@ namespace exec {
         }
 
         void __start_() noexcept {
-          start(__op_);
+          __op_.start();
         }
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          return __self.__start_();
+        void start() noexcept {
+          return __start_();
         }
 
         connect_result_t<_Sender, __spawn_receiver_t<_Env>> __op_;

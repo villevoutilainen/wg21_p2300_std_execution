@@ -33,8 +33,8 @@ namespace {
     R recv_;
     using is_operation_state = void;
 
-    friend void tag_invoke(ex::start_t, op_state& self) noexcept {
-      ex::set_value((R&&) self.recv_, (int) self.val_);
+    void start() noexcept {
+      ex::set_value((R&&) recv_, (int) val_);
     }
   };
 

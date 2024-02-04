@@ -51,9 +51,9 @@ namespace exec {
         STDEXEC_ATTRIBUTE((no_unique_address)) _ItemRcvr __rcvr_;
         __operation_base<_Iterator, _Sentinel>* __parent_;
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
+        void start() noexcept {
           stdexec::set_value(
-            static_cast<_ItemRcvr&&>(__self.__rcvr_), *__self.__parent_->__iterator_++);
+            static_cast<_ItemRcvr&&>(__rcvr_), *__parent_->__iterator_++);
         }
       };
     };
@@ -142,9 +142,8 @@ namespace exec {
         }
       }
 
-      template <same_as<__t> _Self>
-      friend void tag_invoke(start_t, _Self& __self) noexcept {
-        __self.__start_next();
+      void start() noexcept {
+        __start_next();
       }
     };
 

@@ -535,26 +535,26 @@ namespace exec {
         using __on_stopped_callback = typename stdexec::stop_token_of_t<
           stdexec::env_of_t<_Rcvr&>>::template callback_type<__on_stop>;
 
-        friend void tag_invoke(stdexec::start_t, __run_op& __self) noexcept {
+        void start() noexcept {
           std::optional<__on_stopped_callback> __callback(
             std::in_place,
-            stdexec::get_stop_token(stdexec::get_env(__self.__rcvr_)),
-            __on_stop{__self.__context_});
+            stdexec::get_stop_token(stdexec::get_env(__rcvr_)),
+            __on_stop{__context_});
           try {
-            if (__self.__mode_ == until::stopped) {
-              __self.__context_.run_until_stopped();
+            if (__mode_ == until::stopped) {
+              __context_.run_until_stopped();
             } else {
-              __self.__context_.run_until_empty();
+              __context_.run_until_empty();
             }
           } catch (...) {
             __callback.reset();
-            stdexec::set_error(static_cast<_Rcvr&&>(__self.__rcvr_), std::current_exception());
+            stdexec::set_error(static_cast<_Rcvr&&>(__rcvr_), std::current_exception());
           }
           __callback.reset();
-          if (__self.__context_.stop_requested()) {
-            stdexec::set_stopped(static_cast<_Rcvr&&>(__self.__rcvr_));
+          if (__context_.stop_requested()) {
+            stdexec::set_stopped(static_cast<_Rcvr&&>(__rcvr_));
           } else {
-            stdexec::set_value(static_cast<_Rcvr&&>(__self.__rcvr_));
+            stdexec::set_value(static_cast<_Rcvr&&>(__rcvr_));
           }
         }
       };
@@ -685,15 +685,16 @@ namespace exec {
         return __base_;
       }
 
-     private:
-      _Base __base_;
-
-      friend void tag_invoke(stdexec::start_t, __io_task_facade& __self) noexcept {
-        __context& __context = __self.__base_.context();
-        if (__context.submit(&__self)) {
+      void start() noexcept {
+        __context& __context = __base_.context();
+        if (__context.submit(this)) {
           __context.wakeup();
         }
       }
+
+    private:
+      _Base __base_;
+
     };
 
     template <class _ReceiverId>

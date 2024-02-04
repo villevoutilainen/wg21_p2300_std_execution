@@ -193,7 +193,7 @@ namespace stdexec {
         __ignore,
         __ignore,
         _ChildOps&... __ops) noexcept {
-      (_StartTag()(__ops), ...);
+      ((__ops.start()), ...);
     };
 
     inline constexpr auto __complete = //
@@ -365,16 +365,14 @@ namespace stdexec {
         , __inner_ops_(__sexpr_apply((_Sexpr&&) __sexpr, __connect_fn<_Sexpr, _Receiver>{this})) {
       }
 
-      template <same_as<start_t> _Tag2>
-      STDEXEC_ATTRIBUTE((always_inline))
-      friend void tag_invoke(_Tag2, __op_state& __self) noexcept {
+      void start() noexcept {
         using __tag_t = typename __op_state::__tag_t;
-        auto&& __rcvr = __self.__rcvr();
+        auto&& __rcvr = this->__rcvr();
         __tup::__apply(
           [&](auto&... __ops) noexcept {
-            __sexpr_impl<__tag_t>::start(__self.__state_, __rcvr, __ops...);
+            __sexpr_impl<__tag_t>::start(this->__state_, __rcvr, __ops...);
           },
-          __self.__inner_ops_);
+          __inner_ops_);
       }
 
       template <class _Index, class _Tag2, class... _Args>

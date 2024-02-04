@@ -855,17 +855,18 @@ namespace exec {
           , __storage_{__sender.__connect(__rec_)} {
         }
 
-       private:
+        void start() noexcept {
+          this->__on_stop_.emplace(
+            stdexec::get_stop_token(stdexec::get_env(this->__rcvr_)),
+            __on_stop_t{this->__stop_source_});
+          STDEXEC_ASSERT(this->__storage_.__get_vtable()->__start_);
+          this->__storage_.__get_vtable()->__start_(this->__storage_.__get_object_pointer());
+        }
+
+      private:
         __stoppable_receiver_t<_ReceiverId> __rec_;
         __immovable_operation_storage __storage_{};
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          __self.__on_stop_.emplace(
-            stdexec::get_stop_token(stdexec::get_env(__self.__rcvr_)),
-            __on_stop_t{__self.__stop_source_});
-          STDEXEC_ASSERT(__self.__storage_.__get_vtable()->__start_);
-          __self.__storage_.__get_vtable()->__start_(__self.__storage_.__get_object_pointer());
-        }
       };
     };
 
@@ -884,14 +885,15 @@ namespace exec {
           , __storage_{__sender.__connect(__rec_)} {
         }
 
-       private:
+        void start() noexcept {
+          STDEXEC_ASSERT(__storage_.__get_vtable()->__start_);
+          __storage_.__get_vtable()->__start_(__storage_.__get_object_pointer());
+        }
+
+      private:
         STDEXEC_ATTRIBUTE((no_unique_address)) _Receiver __rec_;
         __immovable_operation_storage __storage_{};
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          STDEXEC_ASSERT(__self.__storage_.__get_vtable()->__start_);
-          __self.__storage_.__get_vtable()->__start_(__self.__storage_.__get_object_pointer());
-        }
       };
     };
 

@@ -34,11 +34,11 @@ namespace exec {
         std::variant<connect_result_t<__cvref_t<_CvrefSenderIds>, stdexec::__t<_ReceiverId>>...>
           __variant_;
 
-        friend void tag_invoke(start_t, __t& __self) noexcept {
-          std::visit([](auto& __s) { start(__s); }, __self.__variant_);
+      public:
+        void start() noexcept {
+          std::visit([](auto& __s) { __s.start(); }, __variant_);
         }
 
-       public:
         template <class _Sender, class _Receiver>
         __t(_Sender&& __sender, _Receiver&& __receiver) noexcept(
           __nothrow_connectable<_Sender, _Receiver>)
