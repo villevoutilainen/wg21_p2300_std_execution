@@ -1187,8 +1187,8 @@ namespace stdexec {
     destructible<_Op> &&     //
     std::is_object_v<_Op> && //
     requires(_Op& __op) {    //
-    typename _Op::is_operation_state;
-      __op.start();
+      typename _Op::is_operation_state;
+      {__op.start()} noexcept;
     };
 
 #if !STDEXEC_STD_NO_COROUTINES_
