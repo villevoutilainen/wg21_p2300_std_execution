@@ -59,6 +59,7 @@ namespace exec {
      private:
       struct __operation_base {
         using __execute_fn = void(__operation_base*) noexcept;
+        using is_operation_state = void;
 
         explicit __operation_base(__execute_fn* __execute, std::size_t __max_depth) noexcept
           : __execute_(__execute)

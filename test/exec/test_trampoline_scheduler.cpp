@@ -40,6 +40,8 @@ namespace {
 
     template <class Receiver>
     struct operation {
+      using is_operation_state = void;
+
       Receiver rcvr_;
       int counter_;
 

@@ -25,6 +25,8 @@ using namespace exec;
 namespace {
 
   struct nop_operation {
+    using is_operation_state = void;
+
     friend void tag_invoke(start_t, nop_operation&) noexcept {
     }
   };

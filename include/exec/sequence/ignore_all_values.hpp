@@ -118,6 +118,8 @@ namespace exec {
       using __item_receiver_t = stdexec::__t<__item_receiver<_ItemReceiver, _ResultVariant>>;
 
       struct __t : __base_type {
+        using is_operation_state = void;
+
         connect_result_t<_Sender, __item_receiver_t> __op_;
 
         __t(
@@ -228,6 +230,8 @@ namespace exec {
       using _Receiver = stdexec::__t<_ReceiverId>;
 
       struct __t : __operation_base<_Receiver, __result_variant_t<_Sender, env_of_t<_Receiver>>> {
+        using is_operation_state = void;
+
         using _ResultVariant = __result_variant_t<_Sender, env_of_t<_Receiver>>;
         using __base_type = __operation_base<_Receiver, _ResultVariant>;
         using __receiver_t = stdexec::__t<__receiver<_ReceiverId, _ResultVariant>>;

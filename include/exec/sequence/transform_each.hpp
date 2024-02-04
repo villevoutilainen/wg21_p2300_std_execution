@@ -80,6 +80,8 @@ namespace exec {
       using _Receiver = stdexec::__t<_ReceiverId>;
 
       struct __t : __operation_base<_Receiver, _Adaptor> {
+        using is_operation_state = void;
+
         using __id = __operation;
         subscribe_result_t<_Sender, stdexec::__t<__receiver<_ReceiverId, _Adaptor>>> __op_;
 

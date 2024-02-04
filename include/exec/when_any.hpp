@@ -90,6 +90,8 @@ namespace exec {
 
     template <class _Receiver, class _ResultVariant>
     struct __op_base : __immovable {
+      using is_operation_state = void;
+
       __op_base(_Receiver&& __receiver, int __n_senders)
         : __count_{__n_senders}
         , __receiver_{(_Receiver&&) __receiver} {
@@ -188,6 +190,7 @@ namespace exec {
 
       class __t : __op_base_t {
        public:
+        using is_operation_state = void;
         template <class _SenderTuple>
         __t(_SenderTuple&& __senders, _Receiver&& __rcvr) //
           noexcept(

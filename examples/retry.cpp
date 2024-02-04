@@ -29,7 +29,9 @@ struct fail_some {
 
   template <class R>
   struct op {
+    using is_operation_state = void;
     R r_;
+
 
     friend void tag_invoke(stdexec::start_t, op& self) noexcept {
       static int i = 0;

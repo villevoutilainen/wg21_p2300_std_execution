@@ -29,6 +29,8 @@ namespace exec {
 
       struct __t {
         using __id = __operation;
+        using is_operation_state = void;
+
         STDEXEC_ATTRIBUTE((no_unique_address)) _Receiver __rcvr_;
 
         friend void tag_invoke(start_t, __t& __self) noexcept {

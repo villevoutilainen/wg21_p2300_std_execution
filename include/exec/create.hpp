@@ -44,6 +44,7 @@ namespace exec {
 
       struct __t {
         using __id = __operation;
+        using is_operation_state = void;
 
         STDEXEC_ATTRIBUTE((no_unique_address)) _Context __ctx_;
         STDEXEC_ATTRIBUTE((no_unique_address)) _Fun __fun_;

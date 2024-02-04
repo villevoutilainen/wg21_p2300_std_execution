@@ -31,6 +31,7 @@ namespace {
   struct op_state : immovable {
     int val_;
     R recv_;
+    using is_operation_state = void;
 
     friend void tag_invoke(ex::start_t, op_state& self) noexcept {
       ex::set_value((R&&) self.recv_, (int) self.val_);

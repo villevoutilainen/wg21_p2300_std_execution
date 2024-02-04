@@ -65,6 +65,7 @@ namespace {
     struct oper {
       data* data_;
       R receiver_;
+      using is_operation_state = void;
 
       oper(data* shared_data, R&& recv)
         : data_(shared_data)
@@ -184,6 +185,7 @@ namespace {
     template <typename R>
     struct oper : immovable {
       R recv_;
+      using is_operation_state = void;
 
       friend void tag_invoke(ex::start_t, oper& self) noexcept {
         ex::set_value((R&&) self.recv_);
@@ -249,6 +251,7 @@ namespace {
     struct oper : immovable {
       R recv_;
       E err_;
+      using is_operation_state = void;
 
       friend void tag_invoke(ex::start_t, oper& self) noexcept {
         ex::set_error((R&&) self.recv_, (E&&) self.err_);
@@ -300,6 +303,7 @@ namespace {
     template <typename R>
     struct oper : immovable {
       R recv_;
+      using is_operation_state = void;
 
       friend void tag_invoke(ex::start_t, oper& self) noexcept {
         ex::set_stopped((R&&) self.recv_);

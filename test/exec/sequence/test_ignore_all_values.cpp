@@ -77,6 +77,8 @@ namespace {
   }
 
   struct sequence_op {
+    using is_operation_state = void;
+
     friend void tag_invoke(stdexec::start_t, sequence_op&) noexcept {
     }
   };

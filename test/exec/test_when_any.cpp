@@ -215,6 +215,8 @@ namespace {
 
   template <class Receiver>
   struct dup_op {
+    using is_operation_state = void;
+
     Receiver rec;
 
     friend void tag_invoke(start_t, dup_op& self) noexcept {

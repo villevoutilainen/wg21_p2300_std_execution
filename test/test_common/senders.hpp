@@ -35,6 +35,7 @@ namespace {
     struct operation : immovable {
       std::tuple<Values...> values_;
       Receiver rcvr_;
+      using is_operation_state = void;
 
       friend void tag_invoke(ex::start_t, operation& self) noexcept {
         try {
@@ -105,6 +106,7 @@ namespace {
 
     template <class Receiver>
     struct operation {
+      using is_operation_state = void;
 
       bool condition_;
       Receiver rcvr_;

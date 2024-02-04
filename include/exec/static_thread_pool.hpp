@@ -987,8 +987,12 @@ namespace exec {
 
     template <typename ReceiverId>
     class static_thread_pool_::operation<ReceiverId>::__t : public task_base {
+    public:
+      using is_operation_state = void;
+    private:
       using __id = operation;
       friend static_thread_pool_::scheduler::sender;
+
 
       static_thread_pool_& pool_;
       remote_queue* queue_;
@@ -1244,6 +1248,7 @@ namespace exec {
     template <class CvrefSenderId, class ReceiverId, std::integral Shape, class Fun>
     struct static_thread_pool_::bulk_op_state<CvrefSenderId, ReceiverId, Shape, Fun>::__t {
       using __id = bulk_op_state;
+      using is_operation_state = void;
 
       static constexpr bool may_throw = //
         !__v<__value_types_of_t<
@@ -1298,6 +1303,9 @@ namespace exec {
       template <class Range, class ItemReceiverId>
       struct item_operation {
         class __t : private task_base {
+        public:
+          using is_operation_state = void;
+        private:
           using ItemReceiver = stdexec::__t<ItemReceiverId>;
 
           static void execute_(task_base* base, std::uint32_t /* tid */) noexcept {
@@ -1416,6 +1424,9 @@ namespace exec {
         using Receiver = stdexec::__t<ReceiverId>;
 
         class __t : operation_base_with_receiver<Range, Receiver> {
+        public:
+          using is_operation_state = void;
+        private:
           using Allocator = allocator_of_t<const Receiver&>;
           using ItemSender = stdexec::__t<item_sender<Range>>;
           using NextSender = next_sender_of_t<Receiver, ItemSender>;

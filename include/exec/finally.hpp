@@ -196,10 +196,15 @@ namespace exec {
 
     template <class _InitialSenderId, class _FinalSenderId, class _ReceiverId>
     class __operation_state<_InitialSenderId, _FinalSenderId, _ReceiverId>::__t : public __base_t {
+    public:
+      using is_operation_state = void;
+    private:
       using __initial_receiver_t =
         stdexec::__t<__initial_receiver<_InitialSenderId, _FinalSenderId, _ReceiverId>>;
 
       struct __initial_op_t {
+        using is_operation_state = void;
+
         _FinalSender __sndr_;
         connect_result_t<_InitialSender, __initial_receiver_t> __initial_operation_;
       };

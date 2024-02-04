@@ -213,6 +213,7 @@ namespace exec {
 
       struct __t : __immovable {
         using __id = __operation;
+        using is_operation_state = void;
         __state_t __state_;
         connect_result_t<__sender_t, __receiver_t> __op_;
 

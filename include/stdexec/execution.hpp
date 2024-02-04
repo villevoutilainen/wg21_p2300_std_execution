@@ -469,6 +469,8 @@ namespace stdexec {
     }
 
     struct __debug_operation {
+      using is_operation_state = void;
+
       template <same_as<start_t> _Tag>
       friend void tag_invoke(_Tag, __debug_operation&) noexcept {
       }
@@ -1186,6 +1188,7 @@ namespace stdexec {
     destructible<_Op> &&     //
     std::is_object_v<_Op> && //
     requires(_Op& __op) {    //
+    typename _Op::is_operation_state;
       start(__op);
     };
 
@@ -1214,6 +1217,7 @@ namespace stdexec {
     struct __operation_base {
       __coro::coroutine_handle<> __coro_;
 
+      using is_operation_state = void;
       explicit __operation_base(__coro::coroutine_handle<> __hcoro) noexcept
         : __coro_(__hcoro) {
       }
@@ -3850,6 +3854,7 @@ namespace stdexec {
       struct __t : __task {
         using __id = __operation;
 
+        using is_operation_state = void;
         run_loop* __loop_;
         STDEXEC_ATTRIBUTE((no_unique_address)) _Receiver __rcvr_;
 

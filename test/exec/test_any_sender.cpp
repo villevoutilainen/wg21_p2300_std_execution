@@ -671,6 +671,8 @@ namespace {
    private:
     template <class R>
     struct operation : immovable {
+      using is_operation_state = void;
+
       R recv_;
 
       friend void tag_invoke(ex::start_t, operation& self) noexcept {

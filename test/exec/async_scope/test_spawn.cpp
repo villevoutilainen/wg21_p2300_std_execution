@@ -17,6 +17,8 @@ namespace {
 
     template <class Receiver>
     struct operation {
+      using is_operation_state = void;
+
       Receiver rcvr_;
 
       friend void tag_invoke(ex::start_t, operation& self) noexcept {

@@ -28,6 +28,9 @@ namespace exec {
     template <class _ReceiverId, class... _CvrefSenderIds>
     struct __operation_state {
       class __t {
+      public:
+        using is_operation_state = void;
+      private:
         std::variant<connect_result_t<__cvref_t<_CvrefSenderIds>, stdexec::__t<_ReceiverId>>...>
           __variant_;
 

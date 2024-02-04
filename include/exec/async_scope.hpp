@@ -29,6 +29,8 @@ namespace exec {
     struct async_scope;
 
     struct __task : __immovable {
+      using is_operation_state = void;
+
       const __impl* __scope_;
       void (*__notify_waiter)(__task*) noexcept;
       __task* __next_ = nullptr;
@@ -132,6 +134,8 @@ namespace exec {
     // async_scope::nest implementation
     template <class _ReceiverId>
     struct __nest_op_base : __immovable {
+      using is_operation_state = void;
+
       using _Receiver = stdexec::__t<_ReceiverId>;
       const __impl* __scope_;
       STDEXEC_ATTRIBUTE((no_unique_address)) _Receiver __rcvr_;
@@ -355,6 +359,7 @@ namespace exec {
 
        public:
         using __id = __future_op;
+        using is_operation_state = void;
 
         ~__t() noexcept {
           if (__state_ != nullptr) {

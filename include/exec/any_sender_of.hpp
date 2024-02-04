@@ -844,6 +844,8 @@ namespace exec {
 
       class __t : public __operation_base<_Receiver> {
        public:
+        using is_operation_state = void;
+
         using __id = __operation;
 
         template <class _Sender>
@@ -873,6 +875,7 @@ namespace exec {
 
       class __t {
        public:
+        using is_operation_state = void;
         using __id = __operation;
 
         template <class _Sender>

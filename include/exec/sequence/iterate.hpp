@@ -45,6 +45,8 @@ namespace exec {
     template <class _Iterator, class _Sentinel, class _ItemRcvr>
     struct __item_operation {
       struct __t {
+        using is_operation_state = void;
+
         using __id = __item_operation;
         STDEXEC_ATTRIBUTE((no_unique_address)) _ItemRcvr __rcvr_;
         __operation_base<_Iterator, _Sentinel>* __parent_;
@@ -110,6 +112,7 @@ namespace exec {
 
     template <class _Range, class _ReceiverId>
     struct __operation<_Range, _ReceiverId>::__t : __operation_base_t<_Range> {
+      using is_operation_state = void;
       using _Receiver = stdexec::__t<_ReceiverId>;
       _Receiver __rcvr_;
 

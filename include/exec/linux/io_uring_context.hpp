@@ -525,6 +525,7 @@ namespace exec {
 
       template <class _Rcvr>
       struct __run_op {
+        using is_operation_state = void;
         using __id = __run_op;
         using __t = __run_op;
         _Rcvr __rcvr_;
@@ -646,6 +647,7 @@ namespace exec {
 
     template <__io_task _Base>
     struct __io_task_facade : __task {
+      using is_operation_state = void;
       static bool __ready_(__task* __pointer) noexcept {
         __io_task_facade* __self = static_cast<__io_task_facade*>(__pointer);
         return __self->__base_.ready();

@@ -74,6 +74,8 @@ struct _retry_receiver : stdexec::receiver_adaptor<_retry_receiver<S, R>> {
 // re-construct and re-start it if the operation fails.
 template <class S, class R>
 struct _op {
+  using is_operation_state = void;
+
   S s_;
   R r_;
   std::optional< stdexec::connect_result_t<S&, _retry_receiver<S, R>>> o_;

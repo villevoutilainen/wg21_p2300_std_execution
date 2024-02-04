@@ -259,6 +259,7 @@ namespace stdexec {
     struct __op_base : __immovable {
       using __tag_t = typename __decay_t<_Sexpr>::__tag_t;
       using __state_t = __state_type_t<__tag_t, _Sexpr, _Receiver>;
+      using is_operation_state = void;
 
       STDEXEC_IMMOVABLE_NO_UNIQUE_ADDRESS _Receiver __rcvr_;
       STDEXEC_IMMOVABLE_NO_UNIQUE_ADDRESS __state_t __state_;

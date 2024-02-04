@@ -401,6 +401,9 @@ namespace exec_old {
 
   template <typename ReceiverId>
   class static_thread_pool::operation : task_base {
+  public:
+    using is_operation_state = void;
+  private:
     using Receiver = stdexec::__t<ReceiverId>;
     friend static_thread_pool::scheduler::sender;
 
